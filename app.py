@@ -65,11 +65,23 @@ def customers():
 
 @app.route('/engineer_pods.html')
 def engineer_pods():
-    db_connection = connect_to_database()
-    query = "SELECT engineerID, podID FROM Engineer_Pods;"
-    result = execute_query(db_connection, query).fetchall()
-    print(f"All Engineer_Pods in DB: {result}")
-    return render_template('engineer_pods.html', rows=result)
+    if request.method == 'GET':
+        db_connection = connect_to_database()
+        query = "SELECT engineerID, podID FROM Engineer_Pods;"
+        result = execute_query(db_connection, query).fetchall()
+        print(f"All Engineer_Pods in DB: {result}")
+        return render_template('engineer_pods.html', rows=result)
+    
+    if request.method == 'POST':
+        engineerID = request.form['engineerID']
+        podID = request.form['podID']
+
+        db_connection = connect_to_database()
+        query = "INSERT INTO Engineer_Pods (engineerID, podID) VALUES (%s, %s)"
+        data = engineerID, podID
+        execute_query(db_connection, query, data)
+        return redirect(url_for('engineer_pods'))
+
 
 @app.route('/engineers.html', methods=['POST', 'GET'])
 def engineers():
@@ -93,6 +105,8 @@ def engineers():
        
     else:
         return render_template('engineers.html')
+
+        
 
 
 @app.route('/locations.html', methods=['GET', 'POST'])
