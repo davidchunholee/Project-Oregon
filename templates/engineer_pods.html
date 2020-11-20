@@ -53,6 +53,29 @@
 			</tbody>
 		</table>
 	</div>
+	<div>
+		<p>
+			<button class="btn btn-primary btn-dark" type="button" data-toggle="collapse" data-target="#addEngineerPod" aria-expanded="false" aria-controls="addEngineerPod">Make Engineer/Pod Assignment</button>
+		  <div class="collapse" id="addEngineerPod">
+			<div class="card card-body">
+				<form id="addEngineerPod" action="/engineer_pods.html" method="POST" style="display: inline">
+		
+						<div class="form-row">
+							<div class="col-md-6 mb-3">
+								<label for="validationDefault05">Engineer ID</label> <input class="form-control" id="validationDefault05" required="true" type="text" name="engineerID">
+							</div>
+							<div class="col-md-6 mb-3">
+								<label for="validationDefault06">Pod ID</label> <input class="form-control" id="validationDefault06" required="true" type="text" name="podID">
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="form-check"> </div>
+							<input type="submit" class ="btn btn-primary btn-dark" value="Submit Engineer/Pod Assignment">
+						</div>
+					</form>
+		
+			</div>
+		  </div>
 
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
 	</script> 
