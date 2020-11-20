@@ -16,12 +16,7 @@ def execute_query(db_connection = None, query = None, query_params = ()):
 
     cursor = db_connection.cursor()
 
-    cursor.execute(query)
+    cursor.execute(query, query_params)
 
     db_connection.commit()
     return cursor
-
-if __name__ == '__main__':
-    db = connect_to_database()
-    query = ""
-    results = execute_query(db, query)

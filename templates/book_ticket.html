@@ -36,55 +36,38 @@
 
 	<div class="jumbotron">
 		<h1 class="display-4">Book Your Ticket</h1>
-		<form action="" style="display: inline">
+		<form id="bookticket" action="/book_ticket.html" method="post" style="display: inline">
 			<div class="form-row">
 				<div class="col-md-6 mb-3">
-					<label for="validationDefault01">First name</label> <input class="form-control" id="validationDefault01" required="" type="text" value="">
+					<label for="validationDefault01">First name</label> <input class="form-control" id="validationDefault01" required="true" type="text" name="firstName">
 				</div>
 				<div class="col-md-6 mb-3">
-					<label for="validationDefault02">Last name</label> <input class="form-control" id="validationDefault02" required="" type="text" value="">
+					<label for="validationDefault02">Last name</label> <input class="form-control" id="validationDefault02" required="true" type="text" name="lastName">
 				</div>
 			</div>
 			<div class="form-row">
 				<div class="col-md-3 mb-3">
-					<label for="validationDefault04">Total Number in Party</label> <select class="custom-select" id="validationDefault04" required="">
-						<option disabled selected value="">
-							Select
-						</option>
-						<option>
-							1
-						</option>
-						<option>
-							2
-						</option>
-						<option>
-							3
-						</option>
-						<option>
-							4
-						</option>
-						<option>
-							5
-						</option>
+					<label for="validationDefault03">Total Number in Party</label> <select class="custom-select" id="validationDefault03" required="true" name="partySize">
+						<option disabled selected value="">Select</option>
+						<option>1</option>
+						<option>2</option>
+						<option>3</option>
+						<option>4</option>
+						<option>5</option>
 					</select>
 				</div>
 				<div class="col-md-3 mb-3">
-					<label for="validationDefault04">Destination</label> <select class="custom-select" id="validationDefault04" required="">
-						<option disabled selected value="">
-							Select
-						</option>
-						<option>
-							Eugene
-						</option>
-						<option>
-							Bend
-						</option>
+					<label for="validationDefault04">Destination</label> <select class="custom-select" id="validationDefault04" required="true" name="destination">
+						<option disabled selected value="">Select</option>
+						<option>Eugene</option>
+						<option>Bend</option>
 					</select>
 				</div>
 			</div>
 			<div class="form-group">
-				<div class="form-check"></div>
-			</div><a class="btn btn-primary btn-dark" href="ticket_response.html" type="submit">Book Ticket </a>
+				<div class="form-check"> </div>
+				<input type="submit" class ="btn btn-primary btn-dark" value="Book Ticket">
+			</div>
 		</form>
 	</div>
 

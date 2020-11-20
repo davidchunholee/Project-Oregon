@@ -52,9 +52,28 @@
 				{% endfor %}
 			</tbody>
 		</table>
-	<div>
-		<a class="btn btn-primary btn-dark" href="#" role="button">Add Location</a>
-	</div>​ ​ 
+		<p>
+			<button class="btn btn-primary btn-dark" type="button" data-toggle="collapse" data-target="#addLocation" aria-expanded="false" aria-controls="addLocation">Add Location</button>
+		</p>
+		  <div class="collapse" id="addLocation">
+			<div class="card card-body">
+				<form id="addLocation" action="/locations.html" method="POST" style="display: inline">
+					<form id="bookticket" action="/locations.html" method="post" style="display: inline">
+						<div class="form-row">
+							<div class="col-md-6 mb-3">
+								<label for="validationDefault05">description</label> <input class="form-control" id="validationDefault05" required="true" type="text" name="description">
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="form-check"> </div>
+							<input type="submit" class ="btn btn-primary btn-dark" value="Add New Location">
+						</div>
+					</form>
+		
+			</div>
+		  </div>
+	</div>
+
 
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
 	</script> 
