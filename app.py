@@ -49,7 +49,7 @@ def book_tickets():
                                     customer_query = "INSERT INTO Customers (firstName, lastName, currentPod, destination) VALUES (%s, %s, %s, %s)"
                                     data = (firstName, lastName, currentPod, destination)
                                     execute_query(db_connection, customer_query, data)
-                                    return redirect(url_for('book_ticket'))
+                                    return redirect(url_for('ticket_response'))
         print("error - add more pods")
         
     else:
