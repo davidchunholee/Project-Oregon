@@ -18,6 +18,7 @@ def book_tickets():
         db_connection = connect_to_database()
         result = execute_query(db_connection, query).fetchall()
         print(f"All Customers in DB: {result}")
+
         query = 'SELECT * FROM Transport_Pods'
         db_connection = connect_to_database()
         result = execute_query(db_connection, query).fetchall()
@@ -50,6 +51,7 @@ def book_tickets():
                                     data = (firstName, lastName, currentPod, destination)
                                     execute_query(db_connection, customer_query, data)
                                     return redirect(url_for('ticket_response'))
+        # needs error handling
         print("error - add more pods")
         
     else:
@@ -68,10 +70,17 @@ def engineer_pods():
     if request.method == 'GET':
         db_connection = connect_to_database()
         query = "SELECT engineerID, podID FROM Engineer_Pods;"
+        podquery = "SELECT * FROM Transport_Pods;"
+        engquery = "SELECT * FROM Service_Engineers;"
+
         result = execute_query(db_connection, query).fetchall()
-        print(f"All Engineer_Pods in DB: {result}")
-        return render_template('engineer_pods.html', rows=result)
-    
+        print(f"All Engineer_Pods in DB: {result}")        
+        podresult = execute_query(db_connection, podquery).fetchall()
+        print(f"All Pods in DB: {podresult}")
+        engresult = execute_query(db_connection, engquery).fetchall()
+        print(f"All Engineers in DB: {engresult}")
+        return render_template('engineer_pods.html', rows=result,podresults=podresult, engresults = engresult)
+            
     if request.method == 'POST':
         engineerID = request.form['engineerID']
         podID = request.form['podID']
