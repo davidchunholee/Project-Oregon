@@ -14,20 +14,19 @@ def index():
 @app.route('/book_ticket.html', methods=['POST', 'GET'])
 def book_tickets():
     if request.method == 'GET':
-        query = 'SELECT * FROM Customers'
         db_connection = connect_to_database()
-        result = execute_query(db_connection, query).fetchall()
-        print(f"All Customers in DB: {result}")
+        cquery = 'SELECT * FROM Customers;'
+        cresult = execute_query(db_connection, cquery).fetchall()
+        print(f"All Customers in DB: {cresult}")
 
-        query = 'SELECT * FROM Transport_Pods'
-        db_connection = connect_to_database()
-        result = execute_query(db_connection, query).fetchall()
-        print(f"All Pods in DB: {result}")
+        pquery = 'SELECT * FROM Transport_Pods;'
+        presult = execute_query(db_connection, pquery).fetchall()
+        print(f"All Pods in DB: {presult}")
 
-        query = 'SELECT locationID, description FROM Locations;'
-        db_connection = connect_to_database()
-        result = execute_query(db_connection, query).fetchall()
-        render_template('book_ticket.html', rows=result)
+        lquery = 'SELECT locationID, description FROM Locations;'
+        lresult = execute_query(db_connection, lquery).fetchall()
+        print(f"All Locations in DB: {lresult}")
+        return render_template('book_ticket.html', cresults=cresult, presults=presult, lresults=lresult)
 
     if request.method == 'POST':
         firstName = request.form['firstName']
