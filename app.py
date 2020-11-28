@@ -65,9 +65,11 @@ def book_tickets():
 def customers():
     db_connection = connect_to_database()
     query = "SELECT customerID, firstName, lastName, currentPod, destination FROM Customers;"
+    joint_query = "SELECT customerID, firstName, lastName, currentPod, destination, description FROM Customers INNER JOIN Locations ON Customers.destination = Locations.locationID ORDER BY customerID"
     result = execute_query(db_connection, query).fetchall()
+    joint_result = execute_query(db_connection, joint_query).fetchall()
     print(f"All Customers in DB: {result}")
-    return render_template('customers.html', rows=result)
+    return render_template('customers.html', rows=joint_result)
 
 
 @app.route('/engineer_pods.html', methods=['POST', 'GET'])
@@ -77,6 +79,7 @@ def engineer_pods():
         query = "SELECT engineerID, podID FROM Engineer_Pods;"
         podquery = "SELECT * FROM Transport_Pods;"
         engquery = "SELECT * FROM Service_Engineers;"
+        joinquery = "SELECT Engineer_Pods.engineerID, Service_Engineers.firstName, Service_Engineers.lastName, Engineer_Pods.podID FROM vmodqozl2l4ktlbm.Service_Engineers INNER JOIN vmodqozl2l4ktlbm.Engineer_Pods on Service_Engineers.engineerID = Engineer_Pods.engineerID ORDER BY intersectionID"
 
         result = execute_query(db_connection, query).fetchall()
         print(f"All Engineer_Pods in DB: {result}")        
@@ -84,7 +87,8 @@ def engineer_pods():
         print(f"All Pods in DB: {podresult}")
         engresult = execute_query(db_connection, engquery).fetchall()
         print(f"All Engineers in DB: {engresult}")
-        return render_template('engineer_pods.html', rows=result,podresults=podresult, engresults = engresult)
+        joinresult = execute_query(db_connection,joinquery).fetchall()
+        return render_template('engineer_pods.html', rows=result,podresults=podresult, engresults=engresult, joinresults=joinresult)
             
     if request.method == 'POST':
         engineerID = request.form['engineerID']
@@ -212,7 +216,7 @@ def removePods():
 def pods():
     if request.method == 'GET':
         db_connection = connect_to_database()
-        query = "SELECT podID, operableStatus, seatCapacity, availableSeat, inTransition, currentLocation FROM Transport_Pods;"
+        query = "SELECT podID, operableStatus, seatCapacity, availableSeat, inTransition, currentLocation, description FROM Transport_Pods INNER JOIN Locations ON Transport_Pods.currentLocation = Locations.locationID ORDER BY podID"
         result = execute_query(db_connection, query).fetchall()
         print(f"All Pods in DB: {result}")
         return render_template('pods.html', rows=result)
