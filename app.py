@@ -65,6 +65,7 @@ def customers():
     print(f"All Customers in DB: {result}")
     return render_template('customers.html', rows=result)
 
+
 @app.route('/engineer_pods.html', methods=['POST', 'GET'])
 def engineer_pods():
     if request.method == 'GET':
@@ -91,7 +92,18 @@ def engineer_pods():
         execute_query(db_connection, query, data)
         return redirect(url_for('engineer_pods'))
 
-
+@app.route('/removeengineers.html', methods=['POST'])
+def removeEngineers():
+    engineerID = request.form['engineerID']
+    print(engineerID)
+    db_connection = connect_to_database()
+    query = "DELETE FROM Service_Engineers WHERE engineerID = '%s'" %(engineerID)
+    execute_query(db_connection, query).fetchall()
+    query = "SELECT engineerID, firstName, lastName, available FROM Service_Engineers;"
+    result = execute_query(db_connection, query).fetchall()
+    print(f"All Engineers in DB: {result}")
+    return render_template('engineers.html', rows= result)
+        
 @app.route('/engineers.html', methods=['POST', 'GET'])
 def engineers():
     if request.method == 'GET':
@@ -110,8 +122,8 @@ def engineers():
         data = firstName, lastName, available
         execute_query(db_connection, query, data)
         return redirect(url_for('engineers'))
-  
-    if request.method == 'POST':
+
+    if request.method == 'POST': # search
         lastName = request.form['lastName'] 
         db_connection = connect_to_database()   
         query = "SELECT engineerID, firstName, lastName, available FROM Service_Engineers WHERE lastName = '%s'" %(lastName)
