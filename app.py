@@ -92,7 +92,41 @@ def engineer_pods():
         execute_query(db_connection, query, data)
         return redirect(url_for('engineer_pods'))
 
-@app.route('/removeengineers.html', methods=['POST'])
+@app.route('/remove_eng_pod.html', methods=['POST'])
+def removeEngPod():
+    print('werein')
+    engIDpodID = request.form['engineerID_podID']
+    engID = ""
+    podID = ""
+    i = 0
+    while i <len(engIDpodID) and engIDpodID[i]!= " ": # get eng ID from engIDpodID
+        engID += engIDpodID[i]
+        i+= 1
+    
+    i+=1 
+    while i <len(engIDpodID):       # get pod ID from engIDpodID
+        podID += engIDpodID[i]
+        i+= 1
+    
+    db_connection = connect_to_database()
+    query = "DELETE FROM Engineer_Pods WHERE engineerID ="+ engID + " AND podID = "+ podID+";"
+    execute_query(db_connection, query).fetchall()
+    print("Successfully removed " + engID + " " + podID )
+    
+    query = "SELECT engineerID, podID FROM Engineer_Pods;"
+    podquery = "SELECT * FROM Transport_Pods;"
+    engquery = "SELECT * FROM Service_Engineers;"
+
+    result = execute_query(db_connection, query).fetchall()
+    print(f"All Engineer_Pods in DB: {result}")        
+    podresult = execute_query(db_connection, podquery).fetchall()
+    print(f"All Pods in DB: {podresult}")
+    engresult = execute_query(db_connection, engquery).fetchall()
+    print(f"All Engineers in DB: {engresult}")
+    return render_template('engineer_pods.html', rows=result,podresults=podresult, engresults = engresult)
+
+
+@app.route('/remove_engineers.html', methods=['POST'])
 def removeEngineers():
     engineerID = request.form['engineerID']
     print(engineerID)
