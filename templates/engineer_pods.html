@@ -54,7 +54,8 @@
 		</table>
 		<p>
 			<button class="btn btn-primary btn-dark" type="button" data-toggle="collapse" data-target="#addEngineerPod" aria-expanded="false" aria-controls="addEngineerPod">Make Engineer/Pod Assignment</button>
-		  <div class="collapse" id="addEngineerPod">
+			<button class="btn btn-primary btn-dark" type="button" data-toggle="collapse" data-target="#removeEngineerPod" aria-expanded="false" aria-controls="removeEngineer">Remove Engineer/Pod Assignment</button>
+			<div class="collapse" id="addEngineerPod">
 			<div class="card card-body">
 				<form id="addEngineerPod" action="/engineer_pods.html" method="POST" style="display: inline">
 					<div class="form-row">
@@ -71,6 +72,7 @@
 						<div class="col-md-3 mb-3">
 							<label for="validationDefault06">podID</label> <select class="custom-select" id="validationDefault06" required="true" name="podID">
 								<option disabled selected value="">Select</option>
+								
 								{% for pod in podresults %}
 									<option>{{pod[0]}}</option>
 								{% endfor %}
@@ -84,6 +86,26 @@
 					</form>
 			</div>
 		  </div>
+		  <div class="collapse" id="removeEngineerPod">
+			<div class="card card-body">
+				<form id="removeEngineerPod" action="/remove_eng_pod.html" method="POST" style="display: inline">
+				<div class="form-row">
+						<div class="col-md-3 mb-3">
+					    <select class="custom-select" id="validationDefault05" required="true" name="engineerID_podID">
+								<option disabled selected value=""><strong>EngineerID PodID</strong></option>
+								{% for EP in rows %}
+									<option>{{EP[0]}} {{EP[1]}}</option>
+								{% endfor %}
+						</select>
+						</div>
+				  </div>
+				  <div class="form-group">
+					<div class="form-check"> </div>
+					<input type="submit" class ="btn btn-primary btn-dark" value="Remove Engineer/Pod Assignment">
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
 
 
