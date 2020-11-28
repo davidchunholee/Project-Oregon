@@ -63,7 +63,7 @@
 		<div>
 			<p>
 				<button class="btn btn-primary btn-dark" type="button" data-toggle="collapse" data-target="#addPodForm" aria-expanded="false" aria-controls="addPodForm">Add Pod</button>
-				<button class="btn btn-primary btn-dark" type="button" data-toggle="collapse" data-target="#removePodForm" aria-expanded="false" aria-controls="removePodForm">Remove Pod</button>
+				<button class="btn btn-primary btn-dark" type="button" data-toggle="collapse" data-target="#removePod" aria-expanded="false" aria-controls="removePod">Remove Pod</button>
 			</p>
 			  <div class="collapse" id="addPodForm">
 				<div class="card card-body">
@@ -94,13 +94,29 @@
 				</div>
 			  </div>
 
-			  <div class="collapse" id="removePodForm">
+			  <div class="collapse" id="removePod">
 				<div class="card card-body">
-				  To be implemented
+					<form id="removePod" action="/removepods.html" method="POST" style="display: inline">
+					<div class="form-row">
+							<div class="col-md-3 mb-3">
+								<label for="validationDefault15">podID</label> <select class="custom-select" id="validationDefault15" required="true" name="podID">
+									<option disabled selected value="">Select</option>
+										{% for pod in rows %}
+										<option>{{pod[0]}}</option>
+										{% endfor %}
+									</select>
+									
+							</div>
+					  </div>
+					  <div class="form-group">
+						<div class="form-check"> </div>
+						<input type="submit" class ="btn btn-primary btn-dark" value="Remove">
+						</form>
+					</div>
 				</div>
-			  </div>
-		</div>
+			</div>
 		<br>
+
 			<form id="searchPod" action="/pods.html" method="POST" style="display: inline">
 				<h3>Search Pod by ID:</h3>
 				<div class="input-group mb-3">

@@ -160,6 +160,16 @@ def locations():
     else:
         return render_template('locations.html')
 
+@app.route('/removepods.html', methods=['POST'])
+def removePods():
+    podID = request.form['podID']
+    db_connection = connect_to_database()
+    query = "DELETE FROM Transport_Pods WHERE podID = '%s'" %(podID)
+    execute_query(db_connection, query).fetchall()
+    query = "SELECT podID, operableStatus, seatCapacity, availableSeat, inTransition, currentLocation FROM Transport_Pods;"
+    result = execute_query(db_connection, query).fetchall()
+    return render_template('pods.html', rows= result)
+
 @app.route('/pods.html', methods=['GET', 'POST'])
 def pods():
     if request.method == 'GET':
