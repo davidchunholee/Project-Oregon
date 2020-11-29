@@ -38,6 +38,10 @@ def book_tickets():
         query = "SELECT * FROM Transport_Pods"
         results = execute_query(db_connection, query).fetchall()
 
+        if results is None:
+            # needs error handling
+            print("error - add more pods")
+
         for result in results:
             if result[1] == True:
                 if result[3] > int(partySize):
@@ -54,10 +58,13 @@ def book_tickets():
                                     customer_query = "INSERT INTO Customers (firstName, lastName, currentPod, destination) VALUES (%s, %s, %s, %s)"
                                     data = (firstName, lastName, currentPod, destination)
                                     execute_query(db_connection, customer_query, data)
-                                    return redirect(url_for('ticket_response'))
-        # needs error handling
-        print("error - add more pods")
-        
+
+                                    update_inTransition = "UPDATE Transport_Pods SET inTransition = True WHERE podID = '%s'" %(currentPod)
+                                    execute_query(db_connection, update_inTransition).fetchone()
+
+                                    select_inTransition = "SELECT podID FROM Transport_Pods WHERE podID = '%s'" %(currentPod)
+                                    select_inTransition_results = execute_query(db_connection, select_inTransition).fetchone()
+                                    return redirect(url_for('ticket_response', inTransitionQ=select_inTransition_results))
     else:
         return render_template('book_ticket.html')
 
