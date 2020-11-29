@@ -294,17 +294,15 @@ def pods():
 def review():
     if request.method == 'GET':
         db_connection = connect_to_database()
-        podq = "SELECT podID FROM Transport_Pods WHERE inTransition = True AND currentLocation = 1"
+        podq = "SELECT podID FROM Transport_Pods WHERE inTransition = True"
         podr = execute_query(db_connection,podq).fetchall()        
         return render_template('review.html', podresults=podr)
 
     if request.method == 'POST':
         db_connection = connect_to_database()
         podID = request.form['selectedPod']
-        print(podID)
         techIssue = request.form['techIssue']
-        print(techIssue)
-
+        
         updateq = "UPDATE Transport_Pods SET inTransition = False WHERE podID = '%s'" %(podID)
         execute_query(db_connection,updateq).fetchall()
 
@@ -312,6 +310,18 @@ def review():
             inactivatePod = "UPDATE Transport_Pods SET operableStatus = False WHERE podID = '%s'" %(podID)
             execute_query(db_connection,inactivatePod).fetchall()
 
+        cust_podq = "SELECT * FROM Customers INNER JOIN Transport_Pods WHERE Customers.currentPod = Transport_Pods.podID AND Transport_Pods.podID = '%s'" %(podID)
+        execute_query(db_connection,cust_podq).fetchall()
+        for pair in cust_podq:
+            customerID = pair[0]
+            destination = pair[4]
+
+            updateloc = "UPDATE Transport_Pods SET currentLocation = '%s'" %(destination) 
+            execute_query(db_connection,updateloc).fetchall()
+
+            deleteC = "DELETE FROM Customers WHERE customerID = '%s'" %(customerID)
+            execute_query(db_connection,deleteC).fetchall()
+        
         return render_template('index.html')
 
 
