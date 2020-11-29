@@ -112,7 +112,6 @@ def engineer_pods():
 
 @app.route('/remove_eng_pod.html', methods=['POST'])
 def remove_eng_pod():
-    print('werein')
     engIDpodID = request.form['engineerID_podID']
     engID = ""
     podID = ""
