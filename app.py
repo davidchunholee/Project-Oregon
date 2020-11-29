@@ -65,7 +65,6 @@ def book_tickets():
                                     select_inTransition = "SELECT podID FROM Transport_Pods WHERE podID = '%s'" %(currentPod)
                                     select_inTransition_results = execute_query(db_connection, select_inTransition).fetchone()
                                     selectOne = select_inTransition_results[0]
-                                    print(f"skdjfldsjf {select_inTransition_results[0]}")
 
                                     return render_template('ticket_response.html', row=selectOne)
 
@@ -289,17 +288,33 @@ def pods():
         print(f"All Pods in DB: {result}")
         return render_template('pods.html', searchrows=searchresult, rows= result)
        
-       
     else:
         return render_template('pods.html')
 
-
-
-
-
-@app.route('/review.html')
+@app.route('/review.html', methods=['GET', 'POST'])
 def review():
-    return render_template('review.html')
+    if request.method == 'GET':
+        db_connection = connect_to_database()
+        podq = "SELECT podID FROM Transport_Pods WHERE inTransition = True AND currentLocation = 1"
+        podr = execute_query(db_connection,podq).fetchall()        
+        return render_template('review.html', podresults=podr)
+
+    if request.method == 'POST':
+        db_connection = connect_to_database()
+        podID = request.form['selectedPod']
+        print(podID)
+        techIssue = request.form['techIssue']
+        print(techIssue)
+
+        updateq = "UPDATE Transport_Pods SET inTransition = False WHERE podID = '%s'" %(podID)
+        execute_query(db_connection,updateq).fetchall()
+
+        if techIssue == "Yes":
+            inactivatePod = "UPDATE Transport_Pods SET operableStatus = False WHERE podID = '%s'" %(podID)
+            execute_query(db_connection,inactivatePod).fetchall()
+
+        return render_template('index.html')
+
 
 @app.route('/ticket_response.html')
 def ticket_response():

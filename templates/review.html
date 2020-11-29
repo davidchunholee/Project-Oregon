@@ -35,19 +35,24 @@
 	</nav>
 
 	<div class="jumbotron">
-		<form>
+		<form id="review" action="/review.html" method="POST" style="display: inline">
 			<div class="container">
 				<img alt="portland sign" class="rounded float-right w-50" src="{{url_for('static', filename='img/pdx.jpg')}}"> <!--image by Jessica Dutton-->
 			</div>
 			<h1 class="display-4">Review Your Trip</h1>
 			<div class="form-row">
-				<div class="col-md-5 mb-2">
-					<label for="validationDefault10">Enter pod number</label> <input class="form-control" id="validationDefault10" required="" type="text" value="">
+			<div class="col-md-3 mb-3">
+				<label for="validationDefault10">Select Pod Number</label> <select class="custom-select" id="validationDefault10" required="true" name="selectedPod">
+					<option disabled selected value="">Select</option>
+						{% for podresult in podresults %}
+						<option>{{podresult[0]}}</option>
+						{% endfor %}
+					</select>
 				</div>
 			</div>
 			<div class="form-row">
 				<div class="col-md-5 mb-2">
-					<label for="validationDefault11">How was your experience?</label> <select class="custom-select" id="validationDefault11" required="">
+					<label for="validationDefault11">How was your experience?</label> <select class="custom-select" id="validationDefault11" required="true" name="experience">
 						<option disabled selected value="">
 							Select
 						</option>
@@ -62,7 +67,7 @@
 			</div>
 			<div class="form-row">
 				<div class="col-md-5 mb-2">
-					<label for="validationDefault12">Was there a technical issue with this service?</label> <select class="custom-select" id="validationDefault12" required="">
+					<label for="validationDefault12">Was there a technical issue with this service?</label> <select class="custom-select" id="validationDefault12" required="true" name="techIssue">
 						<option disabled selected value="">
 							Select
 						</option>
@@ -78,10 +83,12 @@
 						<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
 					</div>
 				</div>
-				<div class="form-group">
-					<div class="form-check"></div>
-				</div>
-			</div><button class="btn btn-primary btn-dark type=">Submit Review</button>
+			</div>
+			<div class="form-group">
+				<div class="form-check"></div>
+				<input type="submit" class ="btn btn-primary btn-dark" value="Submit Review">
+			</div>
+		</div>
 		</form>
 	</div>
 
