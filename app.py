@@ -60,13 +60,15 @@ def book_tickets():
                                     execute_query(db_connection, customer_query, data)
 
                                     update_inTransition = "UPDATE Transport_Pods SET inTransition = True WHERE podID = '%s'" %(currentPod)
-                                    execute_query(db_connection, update_inTransition).fetchone()
-
+                                    execute_query(db_connection, update_inTransition).fetchall()
+                                    
                                     select_inTransition = "SELECT podID FROM Transport_Pods WHERE podID = '%s'" %(currentPod)
                                     select_inTransition_results = execute_query(db_connection, select_inTransition).fetchone()
-                                    return redirect(url_for('ticket_response', inTransitionQ=select_inTransition_results))
-    else:
-        return render_template('book_ticket.html')
+                                    selectOne = select_inTransition_results[0]
+                                    print(f"skdjfldsjf {select_inTransition_results[0]}")
+
+                                    return render_template('ticket_response.html', row=selectOne)
+                                    
 
 @app.route('/customers.html')
 def customers():
@@ -86,7 +88,7 @@ def engineer_pods():
         query = "SELECT engineerID, podID FROM Engineer_Pods;"
         podquery = "SELECT * FROM Transport_Pods;"
         engquery = "SELECT * FROM Service_Engineers;"
-        joinquery = "SELECT Engineer_Pods.engineerID, Service_Engineers.firstName, Service_Engineers.lastName, Engineer_Pods.podID FROM vmodqozl2l4ktlbm.Service_Engineers INNER JOIN vmodqozl2l4ktlbm.Engineer_Pods on Service_Engineers.engineerID = Engineer_Pods.engineerID ORDER BY intersectionID"
+        joinquery = "SELECT Engineer_Pods.engineerID, Service_Engineers.firstName, Service_Engineers.lastName, Engineer_Pods.podID FROM Service_Engineers INNER JOIN Engineer_Pods on Service_Engineers.engineerID = Engineer_Pods.engineerID ORDER BY intersectionID"
 
         result = execute_query(db_connection, query).fetchall()
         print(f"All Engineer_Pods in DB: {result}")        
@@ -108,7 +110,8 @@ def engineer_pods():
         return redirect(url_for('engineer_pods'))
 
 @app.route('/remove_eng_pod.html', methods=['POST'])
-def remove_eng_pod():
+def removeEngPod():
+    print('werein')
     engIDpodID = request.form['engineerID_podID']
     engID = ""
     podID = ""
@@ -152,26 +155,6 @@ def removeEngineers():
     print(f"All Engineers in DB: {result}")
     return render_template('engineers.html', rows= result)
         
-@app.route('/edit_engineer.html', methods=['POST'])
-def edit_engineer():  # submit edits for engineer 
-    firstName = request.form['firstName']
-    lastName = request.form['lastName']
-    engineerID = request.form['engineerID']
-    if request.form['available'] == 0:
-        available = 'true'
-    else:
-        available = 'false'
-    db_connection = connect_to_database()
-
-    query = "UPDATE Service_Engineers SET firstName = '%s', lastName = '%s', available = %s WHERE engineerID = '%s';" %(firstName, lastName, available, engineerID)
-    print(query)
-    execute_query(db_connection, query).fetchall()
-
-    query = "SELECT engineerID, firstName, lastName, available FROM Service_Engineers;"
-    result = execute_query(db_connection, query).fetchall()
-    print(f"All Engineers in DB: {result}")
-    return render_template('engineers.html', rows= result)
-
 @app.route('/engineers.html', methods=['POST', 'GET'])
 def engineers():
     if request.method == 'GET':
@@ -180,19 +163,6 @@ def engineers():
         result = execute_query(db_connection, query).fetchall()
         print(f"All Engineers in DB: {result}")
         return render_template('engineers.html', rows=result)
- 
-    if request.method == 'POST' and 'engineerID' in request.form:    # populate default data for engineer
-        engineerID = request.form['engineerID']
-        db_connection = connect_to_database()
-        query = "SELECT * FROM Service_Engineers WHERE engineerID = '%s'" %(engineerID)
-        print(query)
-        eng = execute_query(db_connection, query).fetchall()
-        print(eng)
-        
-        query = "SELECT engineerID, firstName, lastName, available FROM Service_Engineers;"
-        result = execute_query(db_connection, query).fetchall()
-        print(f"All Engineers in DB: {result}")
-        return render_template('engineers_edit.html', rows= result, eng=eng)
 
     if request.method == 'POST' and 'firstName' in request.form:
         firstName = request.form['firstName']
@@ -217,7 +187,6 @@ def engineers():
        
     else:
         return render_template('engineers.html')
-
 
 
         
