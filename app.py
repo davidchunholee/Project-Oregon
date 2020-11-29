@@ -68,8 +68,10 @@ def book_tickets():
                                     print(f"skdjfldsjf {select_inTransition_results[0]}")
 
                                     return render_template('ticket_response.html', row=selectOne)
-                                    
 
+        return render_template('ticket_response_no_pods.html') # no pods available
+
+                                    
 @app.route('/customers.html')
 def customers():
     db_connection = connect_to_database()
@@ -222,10 +224,7 @@ def engineers():
         return render_template('engineers.html')
 
 
-
-
-
-        
+  
 @app.route('/locations.html', methods=['GET', 'POST'])
 def locations():
     if request.method == 'GET':
