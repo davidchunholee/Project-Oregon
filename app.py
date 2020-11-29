@@ -311,12 +311,12 @@ def review():
             execute_query(db_connection,inactivatePod).fetchall()
 
         cust_podq = "SELECT * FROM Customers INNER JOIN Transport_Pods WHERE Customers.currentPod = Transport_Pods.podID AND Transport_Pods.podID = '%s'" %(podID)
-        execute_query(db_connection,cust_podq).fetchall()
-        for pair in cust_podq:
+        cust_podr = execute_query(db_connection,cust_podq).fetchall()
+        for pair in cust_podr:
             customerID = pair[0]
             destination = pair[4]
 
-            updateloc = "UPDATE Transport_Pods SET currentLocation = '%s'" %(destination) 
+            updateloc = "UPDATE Transport_Pods SET currentLocation = '%s' WHERE customerID = '%s'" %(destination, customerID) 
             execute_query(db_connection,updateloc).fetchall()
 
             deleteC = "DELETE FROM Customers WHERE customerID = '%s'" %(customerID)
