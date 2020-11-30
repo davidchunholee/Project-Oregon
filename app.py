@@ -133,6 +133,7 @@ def remove_eng_pod():
     query = "SELECT engineerID, podID FROM Engineer_Pods;"
     podquery = "SELECT * FROM Transport_Pods;"
     engquery = "SELECT * FROM Service_Engineers;"
+    joinquery = "SELECT Engineer_Pods.engineerID, Service_Engineers.firstName, Service_Engineers.lastName, Engineer_Pods.podID FROM Service_Engineers INNER JOIN Engineer_Pods on Service_Engineers.engineerID = Engineer_Pods.engineerID ORDER BY intersectionID"
 
     result = execute_query(db_connection, query).fetchall()
     print(f"All Engineer_Pods in DB: {result}")        
@@ -140,7 +141,8 @@ def remove_eng_pod():
     print(f"All Pods in DB: {podresult}")
     engresult = execute_query(db_connection, engquery).fetchall()
     print(f"All Engineers in DB: {engresult}")
-    return render_template('engineer_pods.html', rows=result,podresults=podresult, engresults = engresult)
+    joinresult = execute_query(db_connection,joinquery).fetchall()
+    return render_template('engineer_pods.html', rows=result,podresults=podresult, engresults=engresult, joinresults=joinresult)
 
 
 @app.route('/remove_engineers.html', methods=['POST'])
