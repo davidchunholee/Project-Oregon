@@ -162,7 +162,7 @@ def edit_engineer():  # submit edits for engineer
     firstName = request.form['firstName']
     lastName = request.form['lastName']
     engineerID = request.form['engineerID']
-    if request.form['available'] == 0:
+    if request.form['available'] == 1:
         available = 'true'
     else:
         available = 'false'
