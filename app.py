@@ -105,7 +105,7 @@ def engineer_pods():
         podID = request.form['podID']
 
         db_connection = connect_to_database()
-        query = "INSERT INTO Engineer_Pods (engineerID, podID) VALUES (%s, %s)"
+        query = "INSERT IGNORE INTO Engineer_Pods (engineerID, podID) VALUES (%s, %s)"
         data = engineerID, podID
         execute_query(db_connection, query, data)
         return redirect(url_for('engineer_pods'))
