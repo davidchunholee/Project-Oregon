@@ -81,9 +81,9 @@
 							<div class="col-md-3 mb-3">
 								<label for="validationDefault09">currentLocation</label> <select class="custom-select" id="validationDefault09" required="true" name="currentLocation">
 									<option disabled selected value="">Select</option>
-									<option>1</option>
-									<option>2</option>
-									<option>3</option>
+									{% for location in cloc %}
+										<option>{{location[0]}} as {{location[1]}}</option>
+									{% endfor %}
 								</select>
 							</div>
 						</div>

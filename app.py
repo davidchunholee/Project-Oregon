@@ -38,10 +38,6 @@ def book_tickets():
         query = "SELECT * FROM Transport_Pods"
         results = execute_query(db_connection, query).fetchall()
 
-        if results is None:
-            # needs error handling
-            print("error - add more pods")
-
         for result in results:
             if result[1] == True:
                 if result[3] > int(partySize):
@@ -61,6 +57,10 @@ def book_tickets():
 
                                     update_inTransition = "UPDATE Transport_Pods SET inTransition = True WHERE podID = '%s'" %(currentPod)
                                     execute_query(db_connection, update_inTransition).fetchall()
+
+                                    updated_seats = result[3] - int(partySize)
+                                    update_partySize = "UPDATE Transport_Pods SET availableSeat = '%s' WHERE podID = '%s'" %(updated_seats, currentPod)
+                                    execute_query(db_connection, update_partySize).fetchall()
                                     
                                     select_inTransition = "SELECT podID FROM Transport_Pods WHERE podID = '%s'" %(currentPod)
                                     select_inTransition_results = execute_query(db_connection, select_inTransition).fetchone()
@@ -263,7 +263,9 @@ def pods():
         query = "SELECT podID, operableStatus, seatCapacity, availableSeat, inTransition, currentLocation, description FROM Transport_Pods INNER JOIN Locations ON Transport_Pods.currentLocation = Locations.locationID ORDER BY podID"
         result = execute_query(db_connection, query).fetchall()
         print(f"All Pods in DB: {result}")
-        return render_template('pods.html', rows=result)
+        cLoc_query = "SELECT * FROM `Locations`"
+        cLoc_result = execute_query(db_connection,cLoc_query).fetchall()
+        return render_template('pods.html', rows=result, cloc=cLoc_result)
 
     if request.method == 'POST' and 'operableStatus' in request.form:
         operableStatus = request.form['operableStatus']
