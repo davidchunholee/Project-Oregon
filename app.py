@@ -89,7 +89,7 @@ def engineer_pods():
         query = "SELECT engineerID, podID FROM Engineer_Pods;"
         podquery = "SELECT * FROM Transport_Pods;"
         engquery = "SELECT * FROM Service_Engineers;"
-        joinquery = "SELECT Engineer_Pods.engineerID, Service_Engineers.firstName, Service_Engineers.lastName, Engineer_Pods.podID FROM Service_Engineers INNER JOIN Engineer_Pods on Service_Engineers.engineerID = Engineer_Pods.engineerID ORDER BY intersectionID"
+        joinquery = "SELECT DISTINCT Engineer_Pods.engineerID, Service_Engineers.firstName, Service_Engineers.lastName, Engineer_Pods.podID FROM Service_Engineers INNER JOIN Engineer_Pods on Service_Engineers.engineerID = Engineer_Pods.engineerID ORDER BY intersectionID"
 
         result = execute_query(db_connection, query).fetchall()
         print(f"All Engineer_Pods in DB: {result}")        
