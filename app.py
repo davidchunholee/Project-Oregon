@@ -330,7 +330,7 @@ def review():
             customerID = pair[0]
             destination = pair[4]
 
-            updateloc = "UPDATE Transport_Pods SET currentLocation = '%s' WHERE podID = '%s'" %(destination, podID) 
+            updateloc = "UPDATE Transport_Pods SET currentLocation = '%s', availableSeat = 5 WHERE podID = '%s'" %(destination, podID) 
             execute_query(db_connection,updateloc).fetchall()
 
             deleteC = "DELETE FROM Customers WHERE customerID = '%s'" %(customerID)
