@@ -246,6 +246,16 @@ def locations():
     else:
         return render_template('locations.html')
 
+@app.route('/removelocations.html', methods=['POST'])
+def removeLocations():
+    locationID = request.form['locationID']
+    db_connection = connect_to_database()
+    query = "DELETE FROM Locations WHERE locationID = '%s'" %(locationID)
+    execute_query(db_connection, query).fetchall()
+    query = "SELECT locationID, description FROM Locations;"
+    result = execute_query(db_connection, query).fetchall()
+    return render_template('locations.html', rows= result)
+
 @app.route('/removepods.html', methods=['POST'])
 def removePods():
     podID = request.form['podID']

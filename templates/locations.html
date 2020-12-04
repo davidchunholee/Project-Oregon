@@ -54,6 +54,7 @@
 		</table>
 		<p>
 			<button class="btn btn-primary btn-dark" type="button" data-toggle="collapse" data-target="#addLocation" aria-expanded="false" aria-controls="addLocation">Add Location</button>
+			<button class="btn btn-primary btn-dark" type="button" data-toggle="collapse" data-target="#removeLocation" aria-expanded="false" aria-controls="removeLocation">Remove Location</button>
 		</p>
 		  <div class="collapse" id="addLocation">
 			<div class="card card-body">
@@ -72,6 +73,27 @@
 		
 			</div>
 		  </div>
+		  <div class="collapse" id="removeLocation">
+			<div class="card card-body">
+				<form id="removeLocation" action="/removelocations.html" method="POST" style="display: inline">
+				<div class="form-row">
+						<div class="col-md-3 mb-3">
+							<label for="validationDefault25">podID</label> <select class="custom-select" id="validationDefault25" required="true" name="locationID">
+								<option disabled selected value="">Select</option>
+									{% for location in rows %}
+									<option>{{location[0]}}</option>
+									{% endfor %}
+								</select>
+								
+						</div>
+				  </div>
+				  <div class="form-group">
+					<div class="form-check"> </div>
+					<input type="submit" class ="btn btn-primary btn-dark" value="Remove">
+					</form>
+				</div>
+			</div>
+
 	</div>
 
 
