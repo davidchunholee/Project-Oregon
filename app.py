@@ -105,13 +105,18 @@ def engineer_pods():
         podID = request.form['podID']
         
         db_connection = connect_to_database()
-        query = "SELECT available FROM Service_Engineers WHERE engineerID = %s" %(engineerID)
-        available = execute_query(db_connection, query).fetchone()
-        print('available', available)
-        if available == (1,):
-            query = "INSERT INTO Engineer_Pods (engineerID, podID) VALUES (%s, %s)"
-            data = engineerID, podID
-            execute_query(db_connection, query, data)
+        availquery = "SELECT available FROM Service_Engineers WHERE engineerID = %s" %(engineerID) #ensure engineer is available
+        available = execute_query(db_connection, availquery).fetchone()
+        
+        if available == (1,): 
+            dupquery = "SELECT * FROM Engineer_Pods WHERE engineerID = %s AND podID = %s" %(engineerID, podID)  # ensure won't result in duplicate assignemnt
+            duplicate = available = execute_query(db_connection, dupquery).fetchone()
+
+            if duplicate is None:
+                print('Creating engineer/pod assignment')
+                query = "INSERT INTO Engineer_Pods (engineerID, podID) VALUES (%s, %s)"
+                data = engineerID, podID
+                execute_query(db_connection, query, data)
         return redirect(url_for('engineer_pods'))
 
 @app.route('/remove_eng_pod.html', methods=['POST'])
