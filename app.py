@@ -103,11 +103,15 @@ def engineer_pods():
     if request.method == 'POST':
         engineerID = request.form['engineerID']
         podID = request.form['podID']
-
+        
         db_connection = connect_to_database()
-        query = "INSERT INTO Engineer_Pods (engineerID, podID) VALUES (%s, %s)"
-        data = engineerID, podID
-        execute_query(db_connection, query, data)
+        query = "SELECT available FROM Service_Engineers WHERE engineerID = %s" %(engineerID)
+        available = execute_query(db_connection, query).fetchone()
+        print('available', available)
+        if available == (1,):
+            query = "INSERT INTO Engineer_Pods (engineerID, podID) VALUES (%s, %s)"
+            data = engineerID, podID
+            execute_query(db_connection, query, data)
         return redirect(url_for('engineer_pods'))
 
 @app.route('/remove_eng_pod.html', methods=['POST'])
