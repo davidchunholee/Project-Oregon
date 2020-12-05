@@ -112,6 +112,7 @@ def engineer_pods():
 
 @app.route('/remove_eng_pod.html', methods=['POST'])
 def remove_eng_pod():
+    db_connection = connect_to_database()
     engIDpodID = request.form['engineerID_podID']
     engID = ""
     podID = ""
@@ -124,9 +125,13 @@ def remove_eng_pod():
     while i <len(engIDpodID):       # get pod ID from engIDpodID
         podID += engIDpodID[i]
         i+= 1
-    
-    db_connection = connect_to_database()
-    query = "DELETE FROM Engineer_Pods WHERE engineerID ="+ engID + " AND podID = "+ podID+";"
+
+    if podID == 'None':
+        podID = 'NULL'
+        query = "DELETE FROM Engineer_Pods WHERE engineerID ="+ engID + " AND podID is "+ podID+";"
+    else:
+        query = "DELETE FROM Engineer_Pods WHERE engineerID ="+ engID + " AND podID = "+ podID+";"
+        
     execute_query(db_connection, query).fetchall()
     print("Successfully removed " + engID + " " + podID )
     
@@ -270,7 +275,7 @@ def removePods():
 def pods():
     if request.method == 'GET':
         db_connection = connect_to_database()
-        query = "SELECT podID, operableStatus, seatCapacity, availableSeat, inTransition, currentLocation, description FROM Transport_Pods INNER JOIN Locations ON Transport_Pods.currentLocation = Locations.locationID ORDER BY podID"
+        query = "SELECT podID, operableStatus, seatCapacity, availableSeat, inTransition, currentLocation, description FROM Transport_Pods LEFT JOIN Locations ON Transport_Pods.currentLocation = Locations.locationID ORDER BY podID"
         result = execute_query(db_connection, query).fetchall()
         print(f"All Pods in DB: {result}")
         cLoc_query = "SELECT * FROM `Locations`"
