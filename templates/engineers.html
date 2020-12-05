@@ -98,7 +98,7 @@
 									<label for="validationDefault05">EngineerID</label> <select class="custom-select" id="validationDefault05" required="true" name="engineerID">
 										<option disabled selected value="">Select</option>
 											{% for engineer in rows %}
-											<option>{{engineer[0]}}</option>
+											<option>{{engineer[0]}} as {{engineer[1]}} {{engineer[2]}}</option>
 											{% endfor %}
 										</select>
 								</div>
@@ -122,7 +122,7 @@
 								<label for="validationDefault05">EngineerID</label> <select class="custom-select" id="validationDefault05" required="true" name="engineerID">
 									<option disabled selected value="">Select</option>
 										{% for engineer in rows %}
-										<option>{{engineer[0]}}</option>
+										<option>{{engineer[0]}} as {{engineer[1]}} {{engineer[2]}}</option>
 										{% endfor %}
 									</select>
 									
