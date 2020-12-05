@@ -3,13 +3,15 @@ from db_connector import connect_to_database, execute_query
 
 app = Flask(__name__)
 
+# homepage
 @app.route('/')
-def homepage():
-    return render_template('index.html')
-
-@app.route('/index.html')
+@app.route('/index.html', methods=['GET'])
 def index():
-    return render_template('index.html')
+    db_connection = connect_to_database()
+    all_locations = 'SELECT * FROM Locations;'
+    all_locations_results = execute_query(db_connection,all_locations).fetchall()
+    print(f"All Locations in DB: {all_locations_results}")
+    return render_template('index.html', index_locations = all_locations_results)
 
 @app.route('/book_ticket.html', methods=['POST', 'GET'])
 def book_tickets():
