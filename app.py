@@ -364,7 +364,11 @@ def review():
             deleteC = "DELETE FROM Customers WHERE customerID = '%s'" %(customerID)
             execute_query(db_connection,deleteC).fetchall()
         
-        return render_template('index.html')
+        # Display index page with all locations in table
+        all_locations = 'SELECT * FROM Locations;'
+        all_locations_results = execute_query(db_connection,all_locations).fetchall()
+        print(f"All Locations in DB: {all_locations_results}")
+        return render_template('index.html', index_locations = all_locations_results)
 
 
 @app.route('/ticket_response.html')
