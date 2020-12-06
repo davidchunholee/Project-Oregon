@@ -44,7 +44,7 @@ def book_tickets():
         # Looks for first pod that satisfies requirements: operable, fits party size, not in transition, and in Portland
         for result in results:
             if result[1] == True:
-                if result[3] > int(partySize):
+                if result[3] >= int(partySize):
                     if result[4] == False:
                         if result[5] == 1:
                             currentPod = str(result[0])
