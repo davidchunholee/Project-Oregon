@@ -105,21 +105,27 @@ def engineer_pods():
         return render_template('engineer_pods.html', rows=result,podresults=podresult, engresults=engresult, joinresults=joinresult)
             
     if request.method == 'POST':
-        engineerID = request.form['engineerID']
+        engineer = request.form['engineerID']
+        engID = ""
+        i = 0
+        while i <len(engineer) and engineer[i]!= ":": # get eng ID from engineer 
+            engID += engineer[i]
+            i+= 1
+        print('eng id', engID)
         podID = request.form['podID']
-        
+ 
         db_connection = connect_to_database()
-        availquery = "SELECT available FROM Service_Engineers WHERE engineerID = %s" %(engineerID) #ensure engineer is available
+        availquery = "SELECT available FROM Service_Engineers WHERE engineerID = %s" %(engID) #ensure engineer is available
         available = execute_query(db_connection, availquery).fetchone()
         
         if available == (1,): 
-            dupquery = "SELECT * FROM Engineer_Pods WHERE engineerID = %s AND podID = %s" %(engineerID, podID)  # ensure won't result in duplicate assignemnt
+            dupquery = "SELECT * FROM Engineer_Pods WHERE engineerID = %s AND podID = %s" %(engID, podID)  # ensure won't result in duplicate assignemnt
             duplicate = available = execute_query(db_connection, dupquery).fetchone()
 
             if duplicate is None:
                 print('Creating engineer/pod assignment')
                 query = "INSERT INTO Engineer_Pods (engineerID, podID) VALUES (%s, %s)"
-                data = engineerID, podID
+                data = engID, podID
                 execute_query(db_connection, query, data)
         return redirect(url_for('engineer_pods'))
 

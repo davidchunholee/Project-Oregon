@@ -62,12 +62,13 @@
 				<form id="addEngineerPod" action="/engineer_pods.html" method="POST" style="display: inline">
 					<div class="form-row">
 						<div class="col-md-3 mb-3">
-							<label for="validationDefault05">engineerID</label> <select class="custom-select" id="validationDefault05" required="true" name="engineerID">
+							<label for="validationDefault05">Engineer - Available Status</label> <select class="custom-select" id="validationDefault05" required="true" name="engineerID">
 								<option disabled selected value="">Select</option>
 								{% for engineer in engresults %}
-									<option>{{engineer[0]}}</option>
+									<option>{{engineer[0]}}: {{engineer[1]}} {{engineer[2]}} - {{engineer[3]}}</option>
 								{% endfor %}
-							</select>
+							</select> 
+							<em>must be available in order to be assigned</em> 
 						</div>
 					</div>
 					<div class="form-row">
