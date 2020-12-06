@@ -46,15 +46,11 @@
 				</tr>
 			</thead>
 			<tbody>
+				{% for location in index_locations %}
 				<tr>
-					<td>Portland</td>
+					<td>{{location[1]}}</td>
 				</tr>
-				<tr>
-					<td>Eugene</td>
-				</tr>
-				<tr>
-					<td>Bend</td>
-				</tr>
+				{% endfor %}
 			</tbody>
         </table>
         <a class="btn btn-primary btn-dark" href="https://github.com/Project-Oregon/main">Learn more about Project Oregon</a>

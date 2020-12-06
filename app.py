@@ -3,16 +3,19 @@ from db_connector import connect_to_database, execute_query
 
 app = Flask(__name__)
 
+# homepage
 @app.route('/')
-def homepage():
-    return render_template('index.html')
-
-@app.route('/index.html')
+@app.route('/index.html', methods=['GET'])
 def index():
-    return render_template('index.html')
+    db_connection = connect_to_database()
+    all_locations = 'SELECT * FROM Locations;'
+    all_locations_results = execute_query(db_connection,all_locations).fetchall()
+    print(f"All Locations in DB: {all_locations_results}")
+    return render_template('index.html', index_locations = all_locations_results)
 
 @app.route('/book_ticket.html', methods=['POST', 'GET'])
 def book_tickets():
+    # GET method used for debugging; prints to terminal pertinent information
     if request.method == 'GET':
         db_connection = connect_to_database()
         cquery = 'SELECT * FROM Customers;'
@@ -38,6 +41,7 @@ def book_tickets():
         query = "SELECT * FROM Transport_Pods"
         results = execute_query(db_connection, query).fetchall()
 
+        # Looks for first pod that satisfies requirements: operable, fits party size, not in transition, and in Portland
         for result in results:
             if result[1] == True:
                 if result[3] > int(partySize):
@@ -213,7 +217,7 @@ def engineers():
         print(f"All Engineers in DB: {result}")
         return render_template('engineers_edit.html', rows= result, eng=eng)
 
-    if request.method == 'POST' and 'firstName' in request.form:
+    if request.method == 'POST' and 'firstName' in request.form:    # add engineer
         firstName = request.form['firstName']
         lastName = request.form['lastName']
         available = request.form['available']
@@ -248,7 +252,7 @@ def locations():
         print(f"All Locations in DB: {result}")
         return render_template('locations.html', rows=result)
 
-    if request.method == 'POST': 
+    if request.method == 'POST': # add location
         description = request.form['description']
 
         db_connection = connect_to_database()
@@ -291,12 +295,13 @@ def pods():
         cLoc_result = execute_query(db_connection,cLoc_query).fetchall()
         return render_template('pods.html', rows=result, cloc=cLoc_result)
 
+    # Inserting new pod - automatically set capacity to 5, availableSeat to 5, inTransition status to false
     if request.method == 'POST' and 'operableStatus' in request.form:
-        operableStatus = request.form['operableStatus']
+        operableStatus = request.form['operableStatus']     #user input
         seatCapacity = '5'
         availableSeat = '5'
         inTransition = '0'
-        currentLocation = request.form['currentLocation']
+        currentLocation = request.form['currentLocation']   #user input
 
         db_connection = connect_to_database()
         query = "INSERT INTO Transport_Pods (operableStatus, seatCapacity, availableSeat, inTransition, currentLocation) VALUES (%s, %s, %s, %s, %s)"
@@ -304,7 +309,7 @@ def pods():
         execute_query(db_connection, query, data)
         return redirect(url_for('pods'))
 
-    if request.method == 'POST':
+    if request.method == 'POST':    #search
         podID = request.form['podID'] 
         db_connection = connect_to_database()   
         query = "SELECT podID, operableStatus, seatCapacity, availableSeat, inTransition, currentLocation FROM Transport_Pods WHERE podID = '%s'" %(podID)
@@ -320,24 +325,27 @@ def pods():
 
 @app.route('/review.html', methods=['GET', 'POST'])
 def review():
-    if request.method == 'GET':
+    if request.method == 'GET':     # populates only pods where inTransition status is True in drop-down menu
         db_connection = connect_to_database()
         podq = "SELECT podID FROM Transport_Pods WHERE inTransition = True"
         podr = execute_query(db_connection,podq).fetchall()        
         return render_template('review.html', podresults=podr)
 
-    if request.method == 'POST':
+    if request.method == 'POST':    
         db_connection = connect_to_database()
         podID = request.form['selectedPod']
         techIssue = request.form['techIssue']
         
+        # upon submitting a review, pod's inTransition status turns to false
         updateq = "UPDATE Transport_Pods SET inTransition = False WHERE podID = '%s'" %(podID)
         execute_query(db_connection,updateq).fetchall()
-
+        
+        # if there is tech issue, update operableStatus to false otherwise stays true
         if techIssue == "Yes":
             inactivatePod = "UPDATE Transport_Pods SET operableStatus = False WHERE podID = '%s'" %(podID)
             execute_query(db_connection,inactivatePod).fetchall()
 
+        # JOIN table to update pod's current location once customer reaches destination
         cust_podq = "SELECT * FROM Customers INNER JOIN Transport_Pods WHERE Customers.currentPod = Transport_Pods.podID AND Transport_Pods.podID = '%s'" %(podID)
         cust_podr = execute_query(db_connection,cust_podq).fetchall()
         for pair in cust_podr:
